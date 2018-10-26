@@ -18,6 +18,7 @@ from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 train = pd.read_csv('train.csv')
 sur = train.Survived == 1
 boy = train.Sex == 'male'
+noAge = np.isnan(train.Age)
 
 # Descriptive Statistics
 print(train.describe())
@@ -26,7 +27,7 @@ print(train.describe())
 # Age
 plt.figure(0)
 ax = plt.subplot(2, 1, 1)
-plt.hist(train.Age[sur], 30)
+plt.hist(train.Age[~noAge][sur], 30)
 ax.plot([np.nanmean(train.Age[sur]),   np.nanmean(train.Age[sur])],   [0, 50], 'r', label='Mean')
 ax.plot([np.nanmedian(train.Age[sur]), np.nanmedian(train.Age[sur])], [0, 50], 'b', label='Median')
 plt.ylabel('Survivors Frequency')
@@ -34,7 +35,7 @@ ax.legend()
 ax.axis([0, 80, 0, 50])
 
 ax = plt.subplot(2, 1, 2)
-plt.hist(train.Age[~sur], 30)
+plt.hist(train.Age[~noAge][~sur], 30)
 ax.plot([np.nanmean(train.Age[~sur]),   np.nanmean(train.Age[~sur])],   [0, 50], 'r', label='Mean')
 ax.plot([np.nanmedian(train.Age[~sur]), np.nanmedian(train.Age[~sur])], [0, 50], 'b', label='Median')
 plt.xlabel('Age')
@@ -43,7 +44,6 @@ ax.legend()
 ax.axis([0, 80, 0, 50])
 
 # No Age
-noAge = np.isnan(train.Age)
 print(sum(train.Survived[noAge])/sum(noAge))
 
 # Gender
